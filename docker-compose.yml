@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: tera_projekt
+      POSTGRES_USER: tera
+      POSTGRES_PASSWORD: CHANGE_ME
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://tera:CHANGE_ME@db:5432/tera_projekt
+      SECRET_KEY: change-this-before-production
+      COOKIE_SECURE: "0"
+    volumes:
+      - uploads:/app/uploads
+    depends_on:
+      - db
+volumes:
+  pgdata:
+  uploads:
