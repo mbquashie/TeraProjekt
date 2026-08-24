@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: tera-projekt-demo
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /login
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: tera-projekt-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: PYTHON_VERSION
+        value: "3.13.7"
+
+databases:
+  - name: tera-projekt-db
+    plan: free
+    databaseName: tera_projekt
+    user: tera_projekt
